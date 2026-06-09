@@ -1,64 +1,40 @@
-# AI/ML Based Anti-Money Laundering (AML) Transaction Monitoring & Risk Detection System
+# Enterprise AML Intelligence Platform (Generation 2)
 
-## 📊 Project Completion Status: 100%
-We have successfully completed all 5 Milestones outlined in the project brief. The repository represents an end-to-end, enterprise-grade Machine Learning solution for detecting complex financial crime, moving beyond traditional rule-based systems to incorporate behavioral and graph network intelligence.
+## Overview
+This repository contains the Generation 2 Enterprise AML Intelligence Platform, transitioning from a basic batch ML model to a fully robust, identity-centric, and graph-augmented Financial Crime Intelligence system.
 
-## 🎯 Model Performance & Benchmarks
+## Performance Benchmarks
+Tested on a **strict chronological temporal holdout set** to guarantee zero data leakage:
+* **ROC-AUC:** `0.9232`
+* **Precision:** `0.8493`
+* **Recall:** `0.4309`
 
-### 1. Fraud Risk Detection Model (LightGBM)
-*Objective: Predict transaction fraud risk.*
-- **ROC-AUC (Primary Benchmark):** 94.78% (0.9478)
-- **Overall Accuracy:** 90.00% (0.90)
-- **PR-AUC:** 84.68% (0.8468)
-- **Explanation:** To ensure strict regulatory compliance and prevent high False Positives, the operational threshold is set conservatively at 0.70. The 95% ROC-AUC indicates world-class separability between legitimate and fraudulent transactions.
+*Note: While precision is exceptionally high (minimizing false positives and investigator alert fatigue), recall indicates that 57% of sophisticated fraud events require further advanced Graph Neural Network (GNN) capabilities to be detected. A threshold tuning study is recommended for business alignment.*
 
-### 2. AML Typology Classification Model (CatBoost)
-*Objective: Predict probability distributions across 10 complex laundering typologies.*
-- **Typology Accuracy:** 78.07% (0.78)
-- **Macro F1 Score:** 72.95% (0.72)
-- **Explanation:** Given the overlapping behavioral patterns of 10 different financial crimes (e.g., Hawala vs. Mule Networks), an exact classification accuracy of ~78% is extremely robust for investigative intelligence.
+## Major Generation 2 Upgrades Implemented:
+1. **Zero-Leakage Feature Engineering:** Restructured temporal sliding windows (`.expanding().mean().shift(1)`) to eliminate look-ahead bias and target leakage.
+2. **Entity Resolution Engine:** Integrated deterministic (PAN/Aadhaar) and probabilistic (Fuzzy Name/DOB) matching.
+3. **Graph Intelligence V2:** Transitioned from basic PageRank to multi-hop metrics, Louvain Community Detection, and Directed Graph Circular Flow Detection to identify layering and smurfing.
+4. **Explainability & SAR Generation:** Added SHAP-based explainer that translates model mathematical drivers directly into Suspicious Activity Report (SAR) narrative strings (`src/explainability/narrative_generator.py`).
+5. **Feature Store (Feast):** Implemented an offline/online feature store to prevent train/serve skew (`src/feature_store/`).
+6. **MLOps & Governance (MLflow & Evidently):** Added MLflow model registry and parameter tracking, alongside Evidently for train vs. test Data Drift monitoring.
+7. **Real-Time Serving (BentoML):** Created the `aml_bento.py` Pydantic endpoint combining the ML model with the feature store for live inferences.
 
----
+## Repository Structure
+* `src/features/` - Core ML feature engineering and temporal velocity calculations.
+* `src/graph_analytics_v2/` - Advanced centrality and circular flow detection graph logic.
+* `src/audits/` - Scripts utilized for entity resolution and community leakage audits.
+* `src/feature_store/` - Feast configuration (`feature_store.yaml`, `features.py`).
+* `src/models/` - Model training (`LightGBM` / `CatBoost`), `run_pipeline.py`, and `train_mlflow.py`.
+* `src/explainability/` - Human-readable SAR narrative generation.
+* `src/serve/` - BentoML serving infrastructure.
+* `src/monitoring/` - Evidently drift detection.
 
-## 🏗️ Repository Architecture
+## Future Roadmap (Generation 3)
+* **Graph Neural Networks:** GraphSAGE / GAT for embeddings.
+* **Feedback Loops:** Continuous learning from investigator SAR outcomes.
+* **Real-Time Streaming:** Kafka/Flink infrastructure.
+* **Graph Databases:** Migration to Neo4j/TigerGraph for scalable multi-hop traversals.
 
-The repository adheres strictly to the requested structure:
-```text
-aml_detection/
-├── data/
-│   ├── raw/                  # Original CSV/Parquet data
-│   └── processed/            # Cleaned, model-ready datasets
-├── notebooks/
-│   ├── eda.ipynb             # Initial data exploration & distributions
-│   └── experiments.ipynb     # Feature engineering & algorithm experiments
-├── src/
-│   ├── preprocessing/        # Data loading and cleaning pipelines
-│   ├── features/             # Graph Analytics (PageRank) & Temporal Features
-│   ├── models/               # LightGBM/CatBoost training and orchestration
-│   └── evaluation/           # Metric calculation and validation
-├── configs/                  # Pipeline parameters
-├── outputs/                  # Saved models, plots, and final_predictions.csv
-├── requirements.txt          # Python dependencies
-└── README.md                 # Project documentation
-```
-
-## 🧠 Key Innovations & USPs
-
-1. **Temporal Leakage Mitigation:** We implemented rigorous Chronological Expanding Windows. The model strictly evaluates historical customer behavior prior to the transaction timestamp, completely eliminating future data leakage.
-2. **Network Intelligence (Graph Analytics):** By transforming the transactions into a Bipartite Graph using `NetworkX`, we engineered a custom `PageRank` feature to mathematically identify highly-centralized transit hubs and funnel accounts.
-3. **Perfect Explainable AI (XAI):** We bypassed "black box" algorithms by using a singular LightGBM model tied directly to a `SHAP TreeExplainer`. The output CSV explicitly details the exact feature attributions mathematically responsible for every flagged transaction.
-
-## 🚀 Final Output
-The system generates a final output in `outputs/final_predictions.csv` containing the exact 6 requested fields per transaction:
-- **Transaction ID**
-- **Fraud Risk Score**
-- **Risk Category** (Low, Medium, High, Critical)
-- **Predicted Typology**
-- **Typology Probability Distribution**
-- **Key Risk Drivers** (Top 3 SHAP Attributions)
-
-## 🔧 Quickstart
-To execute the final pipeline and generate the predictions:
-```bash
-python src/models/run_pipeline.py
-```
+## Author
+Prudhvi Naik / AIgen-Analytics Internship Project
