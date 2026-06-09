@@ -1,45 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Shield, Activity, Share2, FileSearch, User, LayoutDashboard, Settings, AlertTriangle, CheckCircle, ZoomIn } from 'lucide-react';
-import CytoscapeComponent from 'react-cytoscapejs';
+import { Shield, Activity, FileSearch, AlertTriangle, CheckCircle, ServerCrash, Cpu, Activity as ActivityIcon } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import axios from 'axios';
 
-// API base path (fallback for local dev)
+// API base path
 const API_BASE = 'http://localhost:8000';
 
-const Login = () => {
+const DashboardLayout = ({ children }) => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-      <div className="p-8 bg-surface rounded-xl shadow-2xl text-center border border-slate-700 max-w-md w-full">
-        <Shield className="w-16 h-16 text-primary mx-auto mb-4" />
-        <h1 className="text-2xl font-bold text-white mb-2">AML Intelligence Platform</h1>
-        <button onClick={() => window.location.href = "/__catalyst/auth/login"} className="w-full bg-primary hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg mt-8 transition-colors">Sign In with Catalyst</button>
-      </div>
-    </div>
-  );
-};
-
-const DashboardLayout = ({ children, user }) => {
-  return (
-    <div className="flex h-screen bg-background text-slate-200">
-      <aside className="w-64 bg-surface border-r border-slate-800 flex flex-col">
-        <div className="p-6 flex items-center gap-3 border-b border-slate-800">
-          <Shield className="w-8 h-8 text-primary" />
-          <span className="font-bold text-lg text-white">AML Platform</span>
+    <div className="flex h-screen bg-[#0f172a] text-slate-200 font-sans">
+      <aside className="w-64 bg-[#1e293b] border-r border-slate-700 flex flex-col">
+        <div className="p-6 flex items-center gap-3 border-b border-slate-700">
+          <Shield className="w-8 h-8 text-blue-500" />
+          <span className="font-bold text-xl text-white tracking-tight">AML Engine</span>
         </div>
-        <nav className="flex-1 p-4 space-y-2">
-          <Link to="/" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"><LayoutDashboard className="w-5 h-5 text-slate-400" /> Overview</Link>
-          <Link to="/transactions" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"><Activity className="w-5 h-5 text-slate-400" /> Transactions</Link>
-          <Link to="/typology" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"><FileSearch className="w-5 h-5 text-slate-400" /> Typology Analysis</Link>
-          <Link to="/network" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"><Share2 className="w-5 h-5 text-slate-400" /> Network Graph</Link>
+        <nav className="flex-1 p-4 space-y-2 mt-4">
+          <Link to="/" className="flex items-center gap-3 p-3 rounded-lg bg-blue-500/10 text-blue-400 font-medium">
+            <Activity className="w-5 h-5" /> Live Scoring
+          </Link>
         </nav>
-        <div className="p-4 border-t border-slate-800 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center"><User className="w-5 h-5" /></div>
-            <div>
-              <p className="text-sm font-medium text-white">{user?.first_name || 'Admin'}</p>
-              <p className="text-xs text-slate-400">{user?.role?.role_name || 'Investigator'}</p>
-            </div>
+        <div className="p-6 border-t border-slate-700">
+           <div className="flex items-center gap-2 text-xs text-slate-400">
+             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+             Multi-Model Ensemble Active
+           </div>
         </div>
       </aside>
       <main className="flex-1 overflow-auto p-8">{children}</main>
@@ -47,120 +32,160 @@ const DashboardLayout = ({ children, user }) => {
   );
 };
 
-const Overview = () => {
-  const data = [{name: 'Mule Ring', value: 400}, {name: 'Layering', value: 300}, {name: 'Smurfing', value: 300}, {name: 'ATO', value: 200}];
-  const COLORS = ['#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
+const LiveScoring = () => {
+  const [transactions, setTransactions] = useState([]);
+  const [selectedTxn, setSelectedTxn] = useState('');
+  const [prediction, setPrediction] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  return (
-    <div>
-      <h2 className="text-3xl font-bold mb-6 text-white">Dashboard Overview</h2>
-      <div className="grid grid-cols-3 gap-6 mb-8">
-        <div className="bg-surface p-6 rounded-xl border border-slate-800">
-          <p className="text-slate-400 text-sm">Transactions (24h)</p>
-          <h3 className="text-3xl font-bold text-white mt-2">1,204</h3>
-        </div>
-        <div className="bg-surface p-6 rounded-xl border border-slate-800 border-l-4 border-l-danger">
-          <p className="text-slate-400 text-sm">High Risk Alerts</p>
-          <h3 className="text-3xl font-bold text-danger mt-2">42</h3>
-        </div>
-        <div className="bg-surface p-6 rounded-xl border border-slate-800 border-l-4 border-l-warning">
-          <p className="text-slate-400 text-sm">Review Queue</p>
-          <h3 className="text-3xl font-bold text-warning mt-2">15</h3>
-        </div>
-      </div>
-      <div className="bg-surface p-6 rounded-xl border border-slate-800 h-96">
-        <h3 className="text-lg font-semibold text-white mb-4">Detected Typologies</h3>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie data={data} cx="50%" cy="50%" innerRadius={80} outerRadius={120} paddingAngle={5} dataKey="value">
-              {data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
-};
-
-const NetworkIntelligence = () => {
-  const [elements, setElements] = useState([]);
-  
   useEffect(() => {
-    // Fetch mock network for TXN001
-    axios.get(`${API_BASE}/network-analysis/TXN001`).then(res => {
-      const graph = res.data.graph;
-      const cyElements = [];
-      graph.nodes.forEach(n => cyElements.push({ data: { id: n.id, label: n.id, type: n.type }}));
-      graph.links.forEach((l, i) => cyElements.push({ data: { source: l.source, target: l.target, label: l.relation }}));
-      setElements(cyElements);
-    }).catch(err => console.log("Ensure backend is running locally for mock data", err));
+    axios.get(`${API_BASE}/transactions`)
+      .then(res => setTransactions(res.data.transactions))
+      .catch(err => setError("Could not connect to API. Is backend running?"));
   }, []);
 
+  const handlePredict = async (txnId) => {
+    setSelectedTxn(txnId);
+    if (!txnId) return;
+    
+    setLoading(true);
+    setPrediction(null);
+    setError(null);
+    try {
+      const res = await axios.post(`${API_BASE}/predict`, { transaction_id: txnId });
+      setPrediction(res.data);
+    } catch (err) {
+      setError(err.response?.data?.detail || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getScoreColor = (score) => {
+    if (score >= 80) return "text-red-500";
+    if (score >= 40) return "text-amber-500";
+    return "text-emerald-500";
+  };
+
+  const getBgColor = (score) => {
+    if (score >= 80) return "bg-red-500/10 border-red-500/30";
+    if (score >= 40) return "bg-amber-500/10 border-amber-500/30";
+    return "bg-emerald-500/10 border-emerald-500/30";
+  };
+
   return (
-    <div className="h-full flex flex-col">
-      <h2 className="text-3xl font-bold mb-6 text-white">Network Intelligence</h2>
-      <div className="flex-1 bg-surface border border-slate-800 rounded-xl overflow-hidden relative">
-        <div className="absolute top-4 left-4 z-10 bg-background/80 p-4 rounded-lg border border-slate-700 backdrop-blur-sm">
-           <h4 className="text-white font-semibold mb-2">Detected Patterns</h4>
-           <div className="flex items-center gap-2 text-danger text-sm"><AlertTriangle className="w-4 h-4"/> Mule Ring Indicator</div>
-           <div className="flex items-center gap-2 text-warning text-sm mt-1"><ZoomIn className="w-4 h-4"/> Circular Transfer</div>
+    <div className="max-w-6xl mx-auto">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h2 className="text-3xl font-bold text-white tracking-tight">Fraud Detection Engine</h2>
+          <p className="text-slate-400 mt-1">Real-time prediction using LightGBM, XGBoost, and CatBoost Ensemble.</p>
         </div>
-        <CytoscapeComponent 
-          elements={elements} 
-          style={{ width: '100%', height: '100%' }}
-          stylesheet={[
-            { selector: 'node', style: { 'label': 'data(label)', 'background-color': '#3b82f6', 'color': '#fff' } },
-            { selector: 'node[type="customer"]', style: { 'background-color': '#10b981', 'shape': 'diamond' } },
-            { selector: 'node[type="transaction"]', style: { 'background-color': '#ef4444', 'shape': 'hexagon' } },
-            { selector: 'edge', style: { 'width': 2, 'line-color': '#475569', 'target-arrow-color': '#475569', 'target-arrow-shape': 'triangle', 'label': 'data(label)', 'color': '#94a3b8', 'font-size': '10px' } }
-          ]}
-        />
       </div>
+
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-xl mb-6 flex items-center gap-3">
+          <ServerCrash className="w-5 h-5" />
+          {error}
+        </div>
+      )}
+
+      <div className="bg-[#1e293b] border border-slate-700 p-6 rounded-2xl mb-8 shadow-xl">
+        <label className="block text-sm font-medium text-slate-300 mb-2">Select a Transaction to Analyze</label>
+        <select 
+          className="w-full bg-[#0f172a] border border-slate-700 text-white rounded-lg p-3 outline-none focus:border-blue-500 transition-colors"
+          value={selectedTxn}
+          onChange={(e) => handlePredict(e.target.value)}
+        >
+          <option value="">-- Choose Transaction --</option>
+          {transactions.map(t => (
+            <option key={t.transaction_id} value={t.transaction_id}>
+              {t.transaction_id} (Ground Truth: {t.actual_is_aml ? `Fraud - ${t.actual_typology}` : 'Legitimate'})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {loading && (
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+      )}
+
+      {prediction && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Risk Score Card */}
+          <div className={`col-span-1 lg:col-span-1 rounded-2xl p-8 border backdrop-blur-sm flex flex-col items-center justify-center shadow-xl ${getBgColor(prediction.fraud_risk_score)}`}>
+            {prediction.fraud_risk_score >= 80 ? <AlertTriangle className="w-16 h-16 text-red-500 mb-4" /> : <CheckCircle className="w-16 h-16 text-emerald-500 mb-4" />}
+            <h3 className="text-slate-300 text-lg font-medium mb-2">Fraud Risk Score</h3>
+            <div className={`text-6xl font-black tracking-tighter ${getScoreColor(prediction.fraud_risk_score)}`}>
+              {prediction.fraud_risk_score.toFixed(1)}<span className="text-3xl">%</span>
+            </div>
+            <div className={`mt-4 px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider ${prediction.fraud_risk_score >= 80 ? 'bg-red-500 text-white' : prediction.fraud_risk_score >= 40 ? 'bg-amber-500 text-slate-900' : 'bg-emerald-500 text-white'}`}>
+              {prediction.risk_category}
+            </div>
+            {prediction.actual_is_aml === 1 && (
+              <p className="mt-6 text-sm text-slate-400">Ground Truth: Actual Fraud</p>
+            )}
+          </div>
+
+          {/* Typology Chart */}
+          <div className="col-span-1 lg:col-span-2 bg-[#1e293b] border border-slate-700 p-6 rounded-2xl shadow-xl flex flex-col">
+            <h3 className="text-lg font-bold text-white mb-1">Typology Classification</h3>
+            <p className="text-slate-400 text-sm mb-6">Probability distribution across money laundering typologies</p>
+            <div className="flex-1 min-h-[250px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={prediction.typology_probabilities} layout="vertical" margin={{ top: 0, right: 30, left: 40, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={true} vertical={false} />
+                  <XAxis type="number" domain={[0, 100]} stroke="#94a3b8" />
+                  <YAxis dataKey="typology" type="category" width={150} stroke="#94a3b8" fontSize={12} />
+                  <Tooltip cursor={{fill: '#334155'}} contentStyle={{backgroundColor: '#0f172a', borderColor: '#334155', color: '#fff'}} />
+                  <Bar dataKey="probability" fill="#3b82f6" radius={[0, 4, 4, 0]}>
+                    {prediction.typology_probabilities.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.probability > 50 ? '#ef4444' : '#3b82f6'} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* SHAP Explainability */}
+          <div className="col-span-1 lg:col-span-3 bg-[#1e293b] border border-slate-700 p-6 rounded-2xl shadow-xl">
+             <div className="flex items-center gap-3 mb-6">
+                <Cpu className="w-6 h-6 text-indigo-400" />
+                <div>
+                  <h3 className="text-lg font-bold text-white">SHAP Explainability (Why?)</h3>
+                  <p className="text-slate-400 text-sm">Top features mathematically driving the risk score.</p>
+                </div>
+             </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+               {prediction.key_risk_drivers.map((driver, idx) => (
+                 <div key={idx} className="bg-[#0f172a] border border-slate-700 p-4 rounded-xl relative overflow-hidden">
+                   <div className={`absolute top-0 left-0 w-full h-1 ${driver.impact > 0 ? 'bg-red-500' : 'bg-emerald-500'}`}></div>
+                   <p className="text-xs text-slate-400 font-mono mb-1 truncate" title={driver.feature}>{driver.feature}</p>
+                   <p className="text-xl font-bold text-white mb-2">{driver.actual_value}</p>
+                   <div className="flex items-center justify-between text-xs font-semibold">
+                      <span className={driver.impact > 0 ? 'text-red-400' : 'text-emerald-400'}>
+                        {driver.impact > 0 ? '+' : ''}{driver.impact.toFixed(2)} impact
+                      </span>
+                   </div>
+                 </div>
+               ))}
+             </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-
-const Transactions = () => {
-  return (
-    <div>
-       <h2 className="text-3xl font-bold mb-6 text-white">Live Transactions</h2>
-       <div className="bg-surface border border-slate-800 rounded-xl p-6">
-         <p className="text-slate-400">Waiting for Data Store connection...</p>
-       </div>
-    </div>
-  );
-}
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    if (window.catalyst) {
-      window.catalyst.auth.isUserAuthenticated().then(res => {
-        setIsAuthenticated(true);
-        window.catalyst.auth.getCurrentUser().then(u => setUser(u));
-      }).catch(err => {
-        // Fallback for local testing
-        setIsAuthenticated(true);
-      });
-    } else {
-        setIsAuthenticated(true);
-    }
-  }, []);
-
-  if (!isAuthenticated) return <Login />;
-
   return (
     <Router>
-      <DashboardLayout user={user}>
+      <DashboardLayout>
         <Routes>
-          <Route path="/" element={<Overview />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/typology" element={<div className="text-white text-2xl font-bold">Typology Analysis</div>} />
-          <Route path="/network" element={<NetworkIntelligence />} />
+          <Route path="/" element={<LiveScoring />} />
         </Routes>
       </DashboardLayout>
     </Router>

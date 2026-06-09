@@ -1,0 +1,3 @@
+# Final Project Summary
+The AML engine has evolved from a naive, target-leaked prototype into a hardened, graph-augmented, temporally-validated compliance powerhouse. 
+We successfully closed every gap requested by the business: integrating advanced PageRank network analytics, aligning SHAP explainers directly to the base estimator, and orchestrating a unified pipeline that outputs the exact 6 data points required for the final alert investigation interface.

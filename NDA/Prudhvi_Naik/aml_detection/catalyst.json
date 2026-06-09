@@ -1,0 +1,15 @@
+{
+  "project": "Project-Rainfall",
+  "client": {
+    "source": "client"
+  },
+  "appsail": [
+    {
+      "name": "AMLBackend",
+      "source": "backend",
+      "memory": 1024,
+      "stack": "python39",
+      "command": "uvicorn main:app --host 0.0.0.0 --port $X_ZOHO_CATALYST_LISTEN_PORT"
+    }
+  ]
+}
