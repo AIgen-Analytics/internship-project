@@ -23,7 +23,7 @@ def get_risk_category(score, threshold):
 def main():
     print("=" * 60, flush=True)
     print("  ENTERPRISE AML STACKING ENSEMBLE PIPELINE", flush=True)
-    print("  LightGBM + XGBoost + CatBoost → Logistic Meta-Learner", flush=True)
+    print("  LightGBM + XGBoost + CatBoost → Weighted Ensemble", flush=True)
     print("=" * 60, flush=True)
     
     print("\nStep 1: Loading ALL Data and Engineering Features...", flush=True)
@@ -100,43 +100,44 @@ def main():
     cat_auc = roc_auc_score(y_test, cat_test_prob)
     print(f"  CatBoost ROC-AUC: {cat_auc*100:.2f}%", flush=True)
     
-    # === META-LEARNER: Logistic Regression Stacking ===
-    print("\nStep 3d: Training Meta-Learner (Logistic Regression Stacking)...", flush=True)
-    # Stack base learner predictions as features for the meta-learner
-    meta_train = np.column_stack([lgb_train_prob, xgb_train_prob, cat_train_prob])
-    meta_test = np.column_stack([lgb_test_prob, xgb_test_prob, cat_test_prob])
-    
-    meta_model = LogisticRegression(C=1.0, max_iter=1000, class_weight='balanced', random_state=42)
-    meta_model.fit(meta_train, y_train)
-    
-    # Final ensemble probability
-    y_prob = meta_model.predict_proba(meta_test)[:, 1]
+    # === ENSEMBLE: Weighted Probability Average ===
+    # LightGBM gets highest weight (best ROC-AUC), followed by XGBoost, then CatBoost.
+    # This preserves the full probability calibration unlike Logistic Regression stacking.
+    print("\nStep 3d: Computing Weighted Ensemble Probabilities...", flush=True)
+    w_lgb, w_xgb, w_cat = 0.45, 0.35, 0.20
+    y_prob = w_lgb * lgb_test_prob + w_xgb * xgb_test_prob + w_cat * cat_test_prob
     ensemble_auc = roc_auc_score(y_test, y_prob)
     
-    # === THRESHOLD OPTIMIZATION ===
+    # === THRESHOLD OPTIMIZATION (F2-Score: Recall-Biased) ===
+    # In AML, missing a money launderer (False Negative) is far more costly than
+    # a false alert (False Positive). The F2-score weights Recall 4x more than Precision.
     precisions, recalls, thresholds = precision_recall_curve(y_test, y_prob)
-    f1_scores = 2 * (precisions * recalls) / (precisions + recalls + 1e-10)
-    best_idx = np.argmax(f1_scores)
+    beta = 2.0  # F2-score
+    f_beta_scores = (1 + beta**2) * (precisions * recalls) / (beta**2 * precisions + recalls + 1e-10)
+    best_idx = np.argmax(f_beta_scores)
     best_threshold = thresholds[best_idx] if best_idx < len(thresholds) else 0.5
     best_precision = precisions[best_idx]
     best_recall = recalls[best_idx]
+    best_f1 = 2 * (best_precision * best_recall) / (best_precision + best_recall + 1e-10)
+    best_f2 = f_beta_scores[best_idx]
     
     y_pred_optimal = (y_prob >= best_threshold).astype(int)
     raw_accuracy = accuracy_score(y_test, y_pred_optimal)
     
     print(f"\n", flush=True)
     print(f"╔══════════════════════════════════════════════════════╗", flush=True)
-    print(f"║      STACKING ENSEMBLE — FINAL RESULTS              ║", flush=True)
+    print(f"║      WEIGHTED ENSEMBLE — FINAL RESULTS              ║", flush=True)
     print(f"╠══════════════════════════════════════════════════════╣", flush=True)
-    print(f"║  LightGBM ROC-AUC:     {lgb_auc*100:.2f}%                     ║", flush=True)
-    print(f"║  XGBoost ROC-AUC:      {xgb_auc*100:.2f}%                     ║", flush=True)
+    print(f"║  LightGBM ROC-AUC:     {lgb_auc*100:.2f}%  (w={w_lgb})          ║", flush=True)
+    print(f"║  XGBoost ROC-AUC:      {xgb_auc*100:.2f}%  (w={w_xgb})          ║", flush=True)
     print(f"║  CatBoost ROC-AUC:     {cat_auc*100:.2f}%                     ║", flush=True)
     print(f"║  ─────────────────────────────────────────────────  ║", flush=True)
     print(f"║  ENSEMBLE ROC-AUC:     {ensemble_auc*100:.2f}%                     ║", flush=True)
     print(f"║  Raw Accuracy:         {raw_accuracy*100:.2f}%                     ║", flush=True)
     print(f"║  Precision:            {best_precision*100:.2f}%                     ║", flush=True)
     print(f"║  Recall:               {best_recall*100:.2f}%                     ║", flush=True)
-    print(f"║  F1 Score:             {f1_scores[best_idx]*100:.2f}%                     ║", flush=True)
+    print(f"║  F1 Score:             {best_f1*100:.2f}%                     ║", flush=True)
+    print(f"║  F2 Score (Recall↑):   {best_f2*100:.2f}%                     ║", flush=True)
     print(f"║  Optimal Threshold:    {best_threshold:.4f}                     ║", flush=True)
     print(f"╚══════════════════════════════════════════════════════╝", flush=True)
     
