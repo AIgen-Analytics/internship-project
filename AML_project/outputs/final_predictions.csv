@@ -1,0 +1,101 @@
+fraud_risk_score,risk_category,typology_Mule_Ring,typology_Layering,typology_ATO,typology_Smurfing,typology_Identity_Fraud,top_risk_driver,top_driver_shap,actual_is_aml,actual_typology,actual_typology_mapped,predicted_aml
+91.47,Critical Risk,0.46,99.51,0.0,0.0,0.02,transaction_amount,2.3287,1,Rapid Multi-Hop Layering,Layering,1
+97.33,Critical Risk,0.08,99.89,0.0,0.0,0.04,transaction_amount,3.6528,1,Pass-Through Transit Hub,Layering,1
+90.26,Critical Risk,0.98,98.83,0.0,0.01,0.19,transaction_amount,2.2233,1,Rapid Multi-Hop Layering,Layering,1
+30.64,Medium Risk,66.99,23.6,0.0,1.15,8.26,transaction_mode_channel_bank,-0.7781,1,Rapid Multi-Hop Layering,Layering,0
+92.7,Critical Risk,20.9,2.19,0.0,0.0,76.91,transaction_mode_channel_bank,0.7276,1,Charity Abuse,Identity Fraud,1
+99.05,Critical Risk,1.09,97.9,0.0,0.02,1.0,transaction_amount,2.8598,1,Pass-Through Transit Hub,Layering,1
+98.28,Critical Risk,0.03,99.96,0.0,0.0,0.0,transaction_amount,3.6829,1,Pass-Through Transit Hub,Layering,1
+77.7,High Risk,0.05,0.0,0.0,99.87,0.09,transaction_amount,0.8558,1,Structuring (Smurfing),Smurfing,1
+11.42,Low Risk,0.58,0.04,0.0,97.34,2.04,transaction_amount,-1.5891,1,Structuring (Smurfing),Smurfing,0
+63.97,High Risk,0.03,0.0,0.0,99.69,0.28,transaction_amount,0.7334,1,Structuring (Smurfing),Smurfing,1
+87.45,Critical Risk,0.03,0.0,0.0,99.95,0.02,transaction_amount,1.3167,1,Structuring (Smurfing),Smurfing,1
+86.47,Critical Risk,0.19,99.75,0.0,0.0,0.05,transaction_amount,2.4418,1,Rapid Multi-Hop Layering,Layering,1
+96.83,Critical Risk,7.87,5.08,0.0,0.0,87.05,transaction_mode_channel_bank,0.7522,1,Charity Abuse,Identity Fraud,1
+99.87,Critical Risk,0.04,97.45,2.5,0.0,0.0,transaction_amount,2.9973,1,High-Risk Corridor Transfer,Layering,1
+99.06,Critical Risk,0.01,99.98,0.0,0.0,0.0,transaction_amount,3.5223,1,Circular Transaction Loop,Layering,1
+91.61,Critical Risk,0.42,99.55,0.0,0.0,0.03,transaction_amount,3.3937,1,Pass-Through Transit Hub,Layering,1
+98.41,Critical Risk,0.09,99.91,0.0,0.0,0.01,transaction_amount,3.5612,1,Rapid Multi-Hop Layering,Layering,1
+99.9,Critical Risk,0.02,93.73,6.25,0.0,0.0,ip_flag_country_high_risk,1.8809,1,High-Risk Corridor Transfer,Layering,1
+93.71,Critical Risk,0.85,99.09,0.0,0.02,0.04,transaction_amount,1.0855,1,Rapid Multi-Hop Layering,Layering,1
+36.64,Medium Risk,59.31,19.16,0.0,0.0,21.52,sender_running_balance_txn_amount,-0.5213,1,Rapid Multi-Hop Layering,Layering,0
+98.89,Critical Risk,0.01,99.98,0.0,0.0,0.01,transaction_amount,3.1056,1,Pass-Through Transit Hub,Layering,1
+76.85,High Risk,16.79,82.86,0.0,0.01,0.34,transaction_amount,1.0342,1,Circular Transaction Loop,Layering,1
+98.89,Critical Risk,0.03,99.95,0.0,0.01,0.01,transaction_amount,3.0635,1,Pass-Through Transit Hub,Layering,1
+80.89,High Risk,3.57,96.36,0.0,0.0,0.07,transaction_amount,1.1418,1,Rapid Multi-Hop Layering,Layering,1
+90.05,Critical Risk,22.76,1.58,68.75,0.03,6.89,transaction_mode_channel_bank,0.6856,1,Funnel Account Network,Mule Ring,1
+87.61,Critical Risk,65.63,3.0,0.0,0.07,31.3,transaction_amount,0.7275,1,Funnel Account Network,Mule Ring,1
+94.15,Critical Risk,0.32,96.64,2.5,0.1,0.45,transaction_amount,1.2354,1,High-Risk Corridor Transfer,Layering,1
+98.16,Critical Risk,0.01,99.99,0.0,0.0,0.0,transaction_amount,3.5251,1,Pass-Through Transit Hub,Layering,1
+75.85,High Risk,4.55,0.26,0.0,0.14,95.06,transaction_mode_channel_bank,0.7329,1,Charity Abuse,Identity Fraud,1
+78.79,High Risk,16.2,0.89,0.0,0.01,82.9,transaction_amount,2.1897,1,Charity Abuse,Identity Fraud,1
+91.17,Critical Risk,0.07,99.91,0.0,0.0,0.02,transaction_amount,2.7661,1,Rapid Multi-Hop Layering,Layering,1
+40.68,Medium Risk,48.11,46.81,0.0,0.0,5.07,transaction_amount,0.685,1,Circular Transaction Loop,Layering,0
+83.96,High Risk,51.67,13.91,0.0,0.01,34.41,transaction_amount,0.7231,1,Funnel Account Network,Mule Ring,1
+95.16,Critical Risk,0.0,0.0,0.0,99.99,0.0,transaction_amount,1.569,1,Structuring (Smurfing),Smurfing,1
+87.99,Critical Risk,17.71,2.33,0.0,0.0,79.96,transaction_amount,0.7252,1,Charity Abuse,Identity Fraud,1
+68.5,High Risk,60.9,9.51,0.0,0.48,29.11,transaction_mode_channel_bank,0.6015,1,Money Mule Network,Mule Ring,1
+94.18,Critical Risk,0.03,99.96,0.0,0.0,0.01,transaction_amount,3.4723,1,Underground Banking (Hawala),Layering,1
+76.92,High Risk,16.31,3.31,0.0,0.55,79.83,transaction_amount,0.7899,1,Third-Party Payment Web,Identity Fraud,1
+94.61,Critical Risk,0.07,99.89,0.0,0.0,0.03,transaction_amount,2.786,1,Pass-Through Transit Hub,Layering,1
+98.35,Critical Risk,0.07,99.91,0.0,0.0,0.01,transaction_amount,3.0392,1,Underground Banking (Hawala),Layering,1
+93.3,Critical Risk,0.01,0.0,0.0,99.89,0.09,transaction_amount,0.8674,1,Structuring (Smurfing),Smurfing,1
+82.1,High Risk,76.86,23.09,0.0,0.01,0.05,transaction_amount,1.1796,1,Money Mule Network,Mule Ring,1
+83.49,High Risk,16.28,2.86,0.0,0.12,80.75,transaction_mode_channel_bank,0.702,1,Charity Abuse,Identity Fraud,1
+96.38,Critical Risk,0.2,99.79,0.0,0.0,0.01,transaction_amount,3.1282,1,Circular Transaction Loop,Layering,1
+99.86,Critical Risk,0.05,93.7,6.25,0.0,0.0,ip_flag_country_high_risk,1.6429,1,High-Risk Corridor Transfer,Layering,1
+89.72,Critical Risk,8.71,1.28,0.0,0.04,89.98,transaction_mode_channel_bank,0.6972,1,Charity Abuse,Identity Fraud,1
+30.53,Medium Risk,78.83,12.37,0.0,0.19,8.6,transaction_amount,0.6128,1,Money Mule Network,Mule Ring,0
+98.29,Critical Risk,0.04,99.94,0.0,0.01,0.01,transaction_amount,3.5341,1,Underground Banking (Hawala),Layering,1
+98.63,Critical Risk,0.01,99.99,0.0,0.0,0.0,transaction_amount,3.2505,1,Underground Banking (Hawala),Layering,1
+76.3,High Risk,14.28,2.96,0.0,0.0,82.76,transaction_amount,0.767,1,Charity Abuse,Identity Fraud,1
+11.19,Low Risk,49.78,40.17,0.0,0.32,9.73,transaction_mode_channel_bank,-0.5493,0,,Normal,0
+1.8,Low Risk,82.83,0.58,0.0,6.05,10.54,transaction_amount,-1.4095,0,,Normal,0
+15.04,Low Risk,52.48,0.09,0.0,4.3,43.13,transaction_amount,-1.5116,0,,Normal,0
+0.03,Low Risk,5.46,14.91,0.0,74.2,5.44,transaction_status,-6.1739,0,,Normal,0
+4.04,Low Risk,26.04,0.13,0.0,26.07,47.76,transaction_amount,-1.597,0,,Normal,0
+76.81,High Risk,35.63,24.06,0.0,2.17,38.14,transaction_amount,0.6817,0,,Normal,1
+3.15,Low Risk,85.0,0.23,0.0,1.31,13.47,transaction_amount,-1.4335,0,,Normal,0
+1.11,Low Risk,86.74,0.09,0.0,0.95,12.23,transaction_amount,-1.5078,0,,Normal,0
+9.32,Low Risk,53.35,0.07,0.0,0.02,46.57,transaction_amount,-1.6527,0,,Normal,0
+31.3,Medium Risk,84.89,0.24,0.0,0.4,14.47,credit_summation_period,-0.4388,0,,Normal,0
+44.27,Medium Risk,58.22,41.73,0.0,0.0,0.05,transaction_amount,1.0518,0,,Normal,0
+3.38,Low Risk,49.06,0.16,0.0,5.84,44.93,transaction_amount,-1.9697,0,,Normal,0
+25.59,Low Risk,15.44,81.19,0.0,1.25,2.11,transaction_amount,0.7146,0,,Normal,0
+1.28,Low Risk,88.4,0.33,0.0,0.05,11.22,transaction_amount,-1.7849,0,,Normal,0
+82.84,High Risk,39.27,10.17,0.0,0.05,50.5,transaction_mode_channel_bank,0.7123,0,,Normal,1
+5.67,Low Risk,36.42,0.42,0.0,0.06,63.1,transaction_amount,-1.7296,0,,Normal,0
+16.73,Low Risk,35.92,61.68,0.0,0.59,1.81,transaction_status,0.3965,0,,Normal,0
+6.69,Low Risk,20.24,0.11,0.0,8.53,71.11,transaction_amount,-1.1501,0,,Normal,0
+9.06,Low Risk,96.96,0.02,0.0,0.07,2.96,transaction_amount,-1.6229,0,,Normal,0
+5.77,Low Risk,61.62,0.41,0.0,19.21,18.76,transaction_amount,-0.888,0,,Normal,0
+16.05,Low Risk,67.13,23.73,0.0,0.73,8.41,transaction_mode_channel_bank,-0.6383,0,,Normal,0
+1.74,Low Risk,41.48,0.27,0.0,31.45,26.8,transaction_amount,-1.5154,0,,Normal,0
+0.05,Low Risk,60.75,0.32,0.0,0.02,38.91,transaction_status,-5.187,0,,Normal,0
+22.46,Low Risk,7.84,52.11,0.0,37.04,3.01,transaction_mode_channel_bank,-0.6183,0,,Normal,0
+2.03,Low Risk,66.03,0.09,0.0,17.05,16.82,transaction_amount,-1.8217,0,,Normal,0
+18.48,Low Risk,37.93,14.27,0.0,0.34,47.46,transaction_mode_channel_bank,-0.5,0,,Normal,0
+5.85,Low Risk,43.04,0.07,0.0,5.19,51.7,transaction_amount,-1.5827,0,,Normal,0
+0.05,Low Risk,66.72,0.71,0.0,15.31,17.27,transaction_status,-5.1015,0,,Normal,0
+18.75,Low Risk,74.01,25.18,0.0,0.23,0.57,transaction_mode_channel_bank,-0.5446,0,,Normal,0
+14.99,Low Risk,56.54,43.14,0.0,0.03,0.29,transaction_amount,0.5446,0,,Normal,0
+2.73,Low Risk,96.49,0.93,0.0,1.33,1.25,transaction_amount,-1.3172,0,,Normal,0
+4.86,Low Risk,47.96,0.24,0.0,1.35,50.45,transaction_amount,-1.7041,0,,Normal,0
+32.54,Medium Risk,45.9,16.85,2.5,7.64,27.11,transaction_amount,0.6687,0,,Normal,0
+1.29,Low Risk,72.8,0.55,0.0,0.19,26.46,transaction_amount,-1.4501,0,,Normal,0
+0.05,Low Risk,85.23,0.17,0.0,0.03,14.57,transaction_status,-5.1052,0,,Normal,0
+9.11,Low Risk,95.25,3.64,0.0,0.56,0.55,hour,-0.495,0,,Normal,0
+0.03,Low Risk,73.74,0.12,0.0,18.65,7.49,transaction_status,-4.8339,0,,Normal,0
+75.5,High Risk,24.24,10.5,0.0,0.05,65.21,transaction_amount,0.7626,0,,Normal,1
+11.8,Low Risk,22.94,0.01,68.75,0.0,8.29,transaction_amount,-1.6908,0,,Normal,0
+0.02,Low Risk,86.77,0.11,0.0,0.71,12.41,transaction_status,-4.7794,0,,Normal,0
+23.14,Low Risk,42.46,51.85,0.0,0.01,5.68,transaction_amount,0.613,0,,Normal,0
+1.89,Low Risk,56.51,0.17,0.0,0.15,43.18,transaction_amount,-1.448,0,,Normal,0
+25.1,Low Risk,68.59,22.36,0.0,0.0,9.05,transaction_amount,0.7745,0,,Normal,0
+11.47,Low Risk,8.04,90.98,0.0,0.94,0.03,transaction_amount,0.6371,0,,Normal,0
+6.88,Low Risk,31.26,0.07,0.0,8.86,59.81,transaction_amount,-1.6033,0,,Normal,0
+7.22,Low Risk,51.7,0.42,0.0,0.02,47.85,transaction_amount,-1.4055,0,,Normal,0
+62.97,High Risk,25.66,23.29,0.0,0.17,50.88,transaction_amount,0.7273,0,,Normal,1
+18.01,Low Risk,44.54,42.48,0.0,12.6,0.38,transaction_amount,0.506,0,,Normal,0
+85.48,Critical Risk,0.01,0.0,0.0,99.96,0.03,transaction_amount,1.2443,0,,Normal,1
+1.75,Low Risk,91.46,0.14,0.0,0.03,8.38,transaction_amount,-1.5375,0,,Normal,0
